@@ -3,9 +3,6 @@
 	<!-- This is 100% ripped off from RobotLegs - http://github.com/darscan/robotlegs-framework.
    I am working on making my own but this one is so damn good I couldn't help myself. -->
 
-	<!-- set up a prefix for all environment variables -->
-	<property environment="env." />
-
 	<!-- System environment must contain FLEX_HOME variable that points to Flex SDK
   <property name="FLEX_HOME" location="${env.FLEX_HOME}"/> -->
 
@@ -14,8 +11,6 @@
 
 	<!-- Set up FlexUnit Ant tasks -->
 	<taskdef resource="flexUnitTasks.tasks" classpath="${lib.loc}/flexUnitTasks.jar" />
-
-	<taskdef resource="cpptasks" classpath="${lib.loc}/cpptasks.jar" />
 
 	<target name="usage">
 		<echo message="" />
