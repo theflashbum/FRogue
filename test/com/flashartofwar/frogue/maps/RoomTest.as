@@ -1,0 +1,10 @@
+package com.flashartofwar.frogue.maps 
+{
+
+	/**
+	 * @author jessefreeman
+	 */
+	public class RoomTest 
+	{
+	}
+}
