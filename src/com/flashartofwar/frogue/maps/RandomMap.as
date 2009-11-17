@@ -4,37 +4,31 @@ package com.flashartofwar.frogue.maps
 	/**
 	 * @author jessefreeman
 	 */
-	public class RandomMap extends AbstractMap 
+	public class RandomMap extends Map 
 	{
-
-		private var mapsize : Number;
-		private var dirs : Array;
-		private var width : Number;
-		public var arr : Array;
-		private var height : Number;
-		private var paths : Array;
-		private var rooms : Array;
 
 		public function RandomMap(mapsize : Number)
 		{
-			super(this);
+			super();
 			generateMap(mapsize);
 		}
 
 		protected function generateMap(mapsize : Number) : void
 		{
 			this.mapsize = mapsize;
-			this.dirs = [{x:-1, y:0},{x:0, y:1},{x:1, y:0},{x:0, y:-1}];
+			this.dirs = [{x:- 1, y:0},{x:0, y:1},{x:1, y:0},{x:0, y:- 1}];
 			this.width = this.height = mapsize * 2 + 3;
-			this.arr = []; 
+			_tiles = []; 
 			this.paths = []; 
 			this.rooms = [];
-			for (var i : int = 0;i < this.height;i++) {
+			for (var i : int = 0;i < this.height;i ++) 
+			{
 				var a : Array = [];
-				for (var j : int = 0;j < this.width;j++) {
+				for (var j : int = 0;j < this.width;j ++) 
+				{
 					a.push('#');
 				}
-				this.arr.push(a);
+				_tiles.push(a);
 			}
 			
 			genMaze();
@@ -42,33 +36,40 @@ package com.flashartofwar.frogue.maps
 			genPaths();
 			clearJunk();
 			makeDoors();
-			
 		}
 
-		public function genMaze() : void {
+		public function genMaze() : void 
+		{
 			var x : Number = 1, y : Number = 1; 
-			this.arr[x][y] = ' ';
-			while(1) {
+			_tiles[x][y] = ' ';
+			while(1) 
+			{
 				var dir : Number = Math.floor(Math.random() * 4);
-				for (var i : int = 0;i < 4;i++) {
+				for (var i : int = 0;i < 4;i ++) 
+				{
 					var testdir : Number = (dir + i) % 4;
 					var newx : Number = x + this.dirs[testdir].x * 2;
 					var newy : Number = y + this.dirs[testdir].y * 2;
-					if (newx > 0 && newx < this.width && newy > 0 && newy < this.height && this.arr[newx][newy] == '#')
+					if (newx > 0 && newx < this.width && newy > 0 && newy < this.height && _tiles[newx][newy] == '#')
                 break;
 				}
-				if (i < 4) {
+				if (i < 4) 
+				{
 					x += this.dirs[testdir].x;
 					y += this.dirs[testdir].y;
-					this.arr[x][y] = ' ';
+					_tiles[x][y] = ' ';
 					x += this.dirs[testdir].x;
 					y += this.dirs[testdir].y;
-					this.arr[x][y] = '' + testdir;
-				} else { 
+					_tiles[x][y] = '' + testdir;
+				} 
+				else 
+				{ 
 					//backup
-					if (x == 1 && y == 1) break; else {
-						dir = this.arr[x][y];
-						this.arr[x][y] = ' ';
+					if (x == 1 && y == 1) break; 
+					else 
+					{
+						dir = _tiles[x][y];
+						_tiles[x][y] = ' ';
 						x -= this.dirs[dir].x * 2;
 						y -= this.dirs[dir].y * 2;
 					}
@@ -76,51 +77,55 @@ package com.flashartofwar.frogue.maps
 			}
 		}
 
-		public function toString() : String {
-			return this.arr.join();
-		}
-
-		//
-
-		
-		public function genRooms() : void {
+		public function genRooms() : void 
+		{
 			var trycount : Number = 0;
-			while (1) {
+			while (1) 
+			{
 				if (trycount > 10) break;
 				var width : Number = Math.floor(Math.random() * 3) + 2;
 				var height : Number = Math.floor(Math.random() * 3) + 2;
-	    		var x1:Number = Math.floor(Math.random() * (this.mapsize - width)) * 2 + 1;
-	    		var y1:Number = Math.floor(Math.random() * (this.mapsize - height)) * 2 + 1;
-	    		var x2:Number = x1 + width * 2;
-				var y2:Number = y1 + height * 2;
+				var x1 : Number = Math.floor(Math.random() * (this.mapsize - width)) * 2 + 1;
+				var y1 : Number = Math.floor(Math.random() * (this.mapsize - height)) * 2 + 1;
+				var x2 : Number = x1 + width * 2;
+				var y2 : Number = y1 + height * 2;
 				room = new Room(x1, y1, x2, y2);
-				for (var i:int = 0;i < this.rooms.length;i++) {
+				for (var i : int = 0;i < this.rooms.length;i ++) 
+				{
 					if (room.intersects(this.rooms[i])) break;
 				}
-				if (i == this.rooms.length) {
+				if (i == this.rooms.length) 
+				{
 					this.rooms.push(room);
 					trycount = 0;
-				} else {
-					trycount++;
+				} 
+				else 
+				{
+					trycount ++;
 				}
 			}
-			for (i = 0;i < this.rooms.length;i++) {
-				var room:Room = this.rooms[i];
-				for (var x:Number = room.x1;x <= room.x2;x++) {
-					for (var y:Number = room.y1;y <= room.y2;y++) {
-						this.arr[x][y] = 'R';
+			for (i = 0;i < this.rooms.length;i ++) 
+			{
+				var room : Room = this.rooms[i];
+				for (var x : Number = room.x1;x <= room.x2;x ++) 
+				{
+					for (var y : Number = room.y1;y <= room.y2;y ++) 
+					{
+						_tiles[x][y] = 'R';
 					}
 				}
 			}
 		}
 
 		//
-		public function findOtherEnd(room:Room, x:Number, y:Number, dir:Number):Object {
-		    // could probably optimize this by taking steps two at a time
-		    var path:Array = [];
-		    var d:Number = 0;
-		    while(1) {
-			if (d >= 4) { // out of options, back up
+		public function findOtherEnd(room : Room, x : Number, y : Number, dir : Number) : Object 
+		{
+			// could probably optimize this by taking steps two at a time
+			var path : Array = [];
+			var d : Number = 0;
+			while(1) 
+			{
+				if (d >= 4) { // out of options, back up
 			    if (path.length < 2) return null;
 			    var back:Object = path.pop();
 			    x = back.x; 
@@ -130,17 +135,16 @@ package com.flashartofwar.frogue.maps
 			    continue;
 			}
 		
-			if (d == 2) d++; // don't look "back"
-		
-			var tmpdir:Number = (dir + d) % 4;
+				if (d == 2) d++; // don't look "back"
+				var tmpdir:Number = (dir + d) % 4;
 			var tmpx:Number = x + this.dirs[tmpdir].x;
 			var tmpy:Number = y + this.dirs[tmpdir].y;
-			if (this.arr[tmpx][tmpy] == ' ') {
+			if (_tiles[tmpx][tmpy] == ' ') {
 			    path.push({x: x, y: y, dir: dir, nextdir: d});
 			    x = tmpx + this.dirs[tmpdir].x; y = tmpy + this.dirs[tmpdir].y;
 			    dir = tmpdir;
 			    d = 0;
-			    if (this.arr[x][y] == 'R') {
+			    if (_tiles[x][y] == 'R') {
 				for (var rn = 0; rn < this.rooms.length; rn++) {
 				    if (this.rooms[rn].contains(x, y)) break;
 				}
@@ -153,8 +157,8 @@ package com.flashartofwar.frogue.maps
 			    }
 			}
 			else d++;
-		    }
-		    return { end: null, path: null };
+			}
+			return { end: null, path: null };
 		}
 
 		//
@@ -183,7 +187,7 @@ package com.flashartofwar.frogue.maps
 		
 		    // proper path, draw it in
 		    for (i = 0; i < path.path.length; i++) {
-			this.arr[path.path[i].x][path.path[i].y] = 'P';
+			_tiles[path.path[i].x][path.path[i].y] = 'P';
 		    }
 		}
 		//
@@ -192,7 +196,7 @@ package com.flashartofwar.frogue.maps
 				var room : Room = this.rooms[i], edges = room.edges();
 				for (var e = 0;e < edges.length;e++) {
 					var edge = edges[e];
-					if (this.arr[edge.x + this.dirs[edge.dir].x][edge.y + this.dirs[edge.dir].y] == ' ')
+					if (_tiles[edge.x + this.dirs[edge.dir].x][edge.y + this.dirs[edge.dir].y] == ' ')
 	    			this.checkPath(room, this.findOtherEnd(room, edge.x, edge.y, edge.dir));
 				}
 			}
@@ -202,8 +206,8 @@ package com.flashartofwar.frogue.maps
 		public function clearJunk() : void {
 			for(var x:int = 0;x < this.width;x++) {
 				for (var y:int = 0;y < this.height;y++) {
-					if (this.arr[x][y] == ' ') this.arr[x][y] = '#';
-					if (this.arr[x][y] != '#') this.arr[x][y] = ' ';
+					if (_tiles[x][y] == ' ') _tiles[x][y] = '#';
+					if (_tiles[x][y] != '#') _tiles[x][y] = ' ';
 				}
 			}
 		}
@@ -222,17 +226,17 @@ package com.flashartofwar.frogue.maps
 			for (var i : int = 0;i < this.paths.length;i++) {
 				var path = this.paths[i].path;
 				if (Math.random() < .05) {
-					this.arr[path[0].x][path[0].y] = 'S';
-					this.arr[path[path.length - 1].x][path[path.length - 1].y] = 'S';
+					_tiles[path[0].x][path[0].y] = 'S';
+					_tiles[path[path.length - 1].x][path[path.length - 1].y] = 'S';
 				} else {
-					this.arr[path[0].x][path[0].y] = this.randomDoor();
-					this.arr[path[path.length - 1].x][path[path.length - 1].y] = this.randomDoor();
+					_tiles[path[0].x][path[0].y] = this.randomDoor();
+					_tiles[path[path.length - 1].x][path[path.length - 1].y] = this.randomDoor();
 				}
 
 				while (Math.random() < .04) { 
 					// collapse(s)
 					i = Math.floor(Math.random() * path.length);
-					this.arr[path[i].x][path[i].y] = '#';
+					_tiles[path[i].x][path[i].y] = '#';
 				}
 			}
 		}

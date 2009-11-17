@@ -1,8 +1,7 @@
 package com.flashartofwar.frogue.maps 
 {
-
-	import org.flexunit.runner.FlexUnitCore;
 	import org.flexunit.Assert;
+
 	/**
 	 * @author jessefreeman
 	 */

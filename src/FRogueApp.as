@@ -1,4 +1,5 @@
 package  {
+	import com.flashartofwar.frogue.maps.RandomMap;
 	import flash.display.StageScaleMode;
 	import flash.display.StageAlign;
 	import flash.display.Sprite;
@@ -11,6 +12,11 @@ package  {
 		public function FRogueApp() {
 			
 			configureStage();
+			trace("Hello World");
+			
+			var map:RandomMap = new RandomMap(10);
+			trace(map);
+			trace(map.tiles.join());
 		}
 		
 		private function configureStage() : void {

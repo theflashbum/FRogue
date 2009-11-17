@@ -19,7 +19,7 @@ package com.flashartofwar.frogue.maps
 
 		[Test]
 
-		public function testGetTiles() : void
+		public function testThatGetTilesReturnsACopyOfTheTileArray() : void
 		{
 			tiles = ["#","#","_"];
 			
@@ -32,7 +32,7 @@ package com.flashartofwar.frogue.maps
 
 		[Test]
 
-		public function testSetTiles() : void
+		public function testSetTilesStoresACleanCopyOfTheArray() : void
 		{
 			
 			var tempTiles : Array = ["#","#","_"];
@@ -71,6 +71,50 @@ package com.flashartofwar.frogue.maps
 			Assert.assertEquals(getTileType(new Point(1, 1)), "_");
 
 			Assert.assertEquals(getTileType(new Point(2, 2)), "@");
+		}
+		
+		[Test]
+		public function testZeroSurroundingTiles():void
+		{
+			tiles = [["01","02","03","04"],
+					 ["05","06","07","08"],
+					 ["09","10","11","12"],
+					 ["13","14","15","16"],
+					 ["17","18","19","20"],
+					 ["21","22","23","24"]];
+			
+			var surroundingTiles:Array = getSurroundingTiles(new Point(2,2), 1, 1);
+			
+			Assert.assertEquals(surroundingTiles.join(), "11");
+		}
+		
+		[Test]
+		public function testGetShallowSetOfSurroundingTiles():void
+		{
+			tiles = [["01","02","03","04"],
+					 ["05","06","07","08"],
+					 ["09","10","11","12"],
+					 ["13","14","15","16"],
+					 ["17","18","19","20"],
+					 ["21","22","23","24"]];
+			
+			var surroundingTiles:Array = getSurroundingTiles(new Point(0,0), 3, 3);
+			
+			Assert.assertEquals(surroundingTiles.join(), "01,02,03,05,06,07,09,10,11");
+		}
+		
+		[Test]
+		public function testGetLargerSetOfSurroundingTiles():void
+		{
+			tiles = [["01","02","03","04"],
+					 ["05","06","07","08"],
+					 ["09","10","11","12"],
+					 ["13","14","15","16"],
+					 ["17","18","19","20"],
+					 ["21","22","23","24"]];
+			var surroundingTiles:Array = getSurroundingTiles(new Point(1,2), 3, 4);
+			
+			Assert.assertEquals(surroundingTiles.join(), "10,11,12,14,15,16,18,19,20,22,23,24");
 		}
 	}
 }
