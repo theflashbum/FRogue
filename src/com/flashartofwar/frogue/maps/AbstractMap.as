@@ -17,6 +17,7 @@ package com.flashartofwar.frogue.maps
 		protected var paths : Array;
 		protected var rooms : Array;
 		protected var _tiles : Array;
+		protected var autoAddTiles : Boolean = true;
 
 		public function AbstractMap(self : AbstractMap) 
 		{
@@ -43,22 +44,51 @@ package com.flashartofwar.frogue.maps
 		{
 			_tiles = value.slice();
 		}
-		
+
 		public function getSurroundingTiles(center : Point, horizontalRange : Number, verticalRange : Number) : Array
 		{
 			
-			var range:Array = [];
-			var i:int;
-			var offsetX:int;
-			var offsetY:int;
-			for(i = 0; i < verticalRange; i++)
+			var range : Array = [];
+			var i : int;
+
+			for(i = 0;i < verticalRange;i ++)
 			{
-				offsetX = center.x;
-				offsetY = center.y + i;
-				range.push(_tiles[offsetY].slice(offsetX,horizontalRange+center.x));
+				range.push(getTilesInRow(center.y + i ,center.x, horizontalRange));
 			}
 			
 			return range;
+		}
+		
+		protected function getTilesInRow(i : int, start : Number, end : Number) : Array
+		{
+			
+			var offset:Number = 0;
+			if(start < 0)
+			{
+				offset = start * -1;
+				start = 0;
+			}
+			
+			var row:Array = _tiles[i] as Array;
+			
+			var total:int = row.length;
+			
+			var length:Number = end + start + offset;
+			
+			var leftOver:Number = length > total ? length - total : 0;
+			
+			var tiles:Array = row.slice(start, end + start + offset);
+			
+			if(autoAddTiles)
+			{
+				var emptyTiles:Array = new Array();
+				for (i = 0; i < leftOver; i++)
+				{
+					emptyTiles.push("X");
+				}
+				emptyTiles.push(leftOver);
+			}
+			return tiles;
 		}
 
 		public function toString() : String
@@ -74,5 +104,10 @@ package com.flashartofwar.frogue.maps
 			
 			return stringMap;
 		}
+		
+//		protected function calculateOffset(start:Number, length:Number):Number
+//		{
+//			var result:Number = 	
+//		}
 	}
 }

@@ -116,5 +116,23 @@ package com.flashartofwar.frogue.maps
 			
 			Assert.assertEquals(surroundingTiles.join(), "10,11,12,14,15,16,18,19,20,22,23,24");
 		}
+		
+		[Test]
+		public function testGetTilesInRowInBounds():void
+		{
+			tiles = [["01","02","03","04"]];
+			var selection:Array = getTilesInRow(0, 1, 3);
+			
+			Assert.assertEquals(selection.join(), "02,03,04");
+		}
+		
+		[Test]
+		public function testGetTilesInRowOutOfBounds():void
+		{
+			tiles = [["01","02","03","04"]];
+			var selection:Array = getTilesInRow(0, -3, 7);
+			
+			Assert.assertEquals(selection.join(), "02,03,04,x,x,x");
+		}
 	}
 }
