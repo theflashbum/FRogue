@@ -72,9 +72,10 @@ package com.flashartofwar.frogue.maps
 
 			Assert.assertEquals(getTileType(new Point(2, 2)), "@");
 		}
-		
+
 		[Test]
-		public function testZeroSurroundingTiles():void
+
+		public function testZeroSurroundingTiles() : void
 		{
 			tiles = [["01","02","03","04"],
 					 ["05","06","07","08"],
@@ -83,13 +84,14 @@ package com.flashartofwar.frogue.maps
 					 ["17","18","19","20"],
 					 ["21","22","23","24"]];
 			
-			var surroundingTiles:Array = getSurroundingTiles(new Point(2,2), 1, 1);
+			var surroundingTiles : Array = getSurroundingTiles(new Point(2, 2), 1, 1);
 			
 			Assert.assertEquals(surroundingTiles.join(), "11");
 		}
-		
+
 		[Test]
-		public function testGetShallowSetOfSurroundingTiles():void
+
+		public function testGetShallowSetOfSurroundingTiles() : void
 		{
 			tiles = [["01","02","03","04"],
 					 ["05","06","07","08"],
@@ -98,13 +100,14 @@ package com.flashartofwar.frogue.maps
 					 ["17","18","19","20"],
 					 ["21","22","23","24"]];
 			
-			var surroundingTiles:Array = getSurroundingTiles(new Point(0,0), 3, 3);
+			var surroundingTiles : Array = getSurroundingTiles(new Point(0, 0), 3, 3);
 			
 			Assert.assertEquals(surroundingTiles.join(), "01,02,03,05,06,07,09,10,11");
 		}
-		
+
 		[Test]
-		public function testGetLargerSetOfSurroundingTiles():void
+
+		public function testGetLargerSetOfSurroundingTiles() : void
 		{
 			tiles = [["01","02","03","04"],
 					 ["05","06","07","08"],
@@ -112,27 +115,46 @@ package com.flashartofwar.frogue.maps
 					 ["13","14","15","16"],
 					 ["17","18","19","20"],
 					 ["21","22","23","24"]];
-			var surroundingTiles:Array = getSurroundingTiles(new Point(1,2), 3, 4);
+			var surroundingTiles : Array = getSurroundingTiles(new Point(1, 2), 3, 4);
 			
 			Assert.assertEquals(surroundingTiles.join(), "10,11,12,14,15,16,18,19,20,22,23,24");
 		}
-		
+
 		[Test]
-		public function testGetTilesInRowInBounds():void
+
+		public function testGetTilesInRowInBounds() : void
 		{
 			tiles = [["01","02","03","04"]];
-			var selection:Array = getTilesInRow(0, 1, 3);
+			var selection : Array = getTilesInRow(0, 1, 3);
 			
 			Assert.assertEquals(selection.join(), "02,03,04");
 		}
-		
+
 		[Test]
-		public function testGetTilesInRowOutOfBounds():void
+
+		public function testGetTilesInRowOutOfBounds() : void
 		{
 			tiles = [["01","02","03","04"]];
-			var selection:Array = getTilesInRow(0, -3, 7);
+			var selection : Array = getTilesInRow(0, - 3, 7);
 			
 			Assert.assertEquals(selection.join(), "01,02,03,04,X,X,X,X,X,X");
+		}
+
+		[Test]
+
+		public function testAddRow() : void
+		{
+			addRow(["#","#","#","#"]);
+			Assert.assertEquals(tiles.length, 1);
+		}
+
+		[Test]
+
+		public function testRemoveRow() : void
+		{
+			tiles = [["#","#","#","#"], ["#"," "," ","#"], ["#","#","#","#"]];
+			removeRow(0);
+			Assert.assertEquals((tiles[0] as Array).join(), "#, , ,#");
 		}
 	}
 }

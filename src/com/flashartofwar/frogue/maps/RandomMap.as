@@ -2,17 +2,46 @@ package com.flashartofwar.frogue.maps
 {
 
 	/**
-	 * @author jessefreeman
+	 * The MIT License
+	 * 
+	 * Copyright (c) 2009 @author jessefreeman
+	 * 
+	 * Permission is hereby granted, free of charge, to any person obtaining a copy
+	 * of this software and associated documentation files (the "Software"), to deal
+	 * in the Software without restriction, including without limitation the rights
+	 * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+	 * copies of the Software, and to permit persons to whom the Software is
+	 * furnished to do so, subject to the following conditions:
+	 * 
+	 * The above copyright notice and this permission notice shall be included in
+	 * all copies or substantial portions of the Software.
+	 * 
+	 * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+	 * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+	 * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+	 * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+	 * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+	 * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+	 * THE SOFTWARE.
+	 * 
 	 */
-	public class RandomMap extends Map 
+	public class RandomMap extends AbstractMap 
 	{
 
+		/**
+		 * 
+		 * @param mapsize
+		 */
 		public function RandomMap(mapsize : Number)
 		{
-			super();
+			super(this);
 			generateMap(mapsize);
 		}
 
+		/**
+		 * 
+		 * @param mapsize
+		 */
 		protected function generateMap(mapsize : Number) : void
 		{
 			this.mapsize = mapsize;
@@ -38,6 +67,9 @@ package com.flashartofwar.frogue.maps
 			makeDoors();
 		}
 
+		/**
+		 * 
+		 */
 		public function genMaze() : void 
 		{
 			var x : Number = 1, y : Number = 1; 
@@ -77,6 +109,9 @@ package com.flashartofwar.frogue.maps
 			}
 		}
 
+		/**
+		 * 
+		 */
 		public function genRooms() : void 
 		{
 			var trycount : Number = 0;
@@ -118,6 +153,14 @@ package com.flashartofwar.frogue.maps
 		}
 
 		//
+		/**
+		 * 
+		 * @param room
+		 * @param x
+		 * @param y
+		 * @param dir
+		 * @return 
+		 */
 		public function findOtherEnd(room : Room, x : Number, y : Number, dir : Number) : Object 
 		{
 			// could probably optimize this by taking steps two at a time
@@ -125,77 +168,98 @@ package com.flashartofwar.frogue.maps
 			var d : Number = 0;
 			while(1) 
 			{
-				if (d >= 4) { // out of options, back up
-			    if (path.length < 2) return null;
-			    var back:Object = path.pop();
-			    x = back.x; 
-			    y = back.y;
-			    dir = back.dir;
-			    d = back.nextdir + 1;
-			    continue;
-			}
-		
-				if (d == 2) d++; // don't look "back"
-				var tmpdir:Number = (dir + d) % 4;
-			var tmpx:Number = x + this.dirs[tmpdir].x;
-			var tmpy:Number = y + this.dirs[tmpdir].y;
-			if (_tiles[tmpx][tmpy] == ' ') {
-			    path.push({x: x, y: y, dir: dir, nextdir: d});
-			    x = tmpx + this.dirs[tmpdir].x; y = tmpy + this.dirs[tmpdir].y;
-			    dir = tmpdir;
-			    d = 0;
-			    if (_tiles[x][y] == 'R') {
-				for (var rn = 0; rn < this.rooms.length; rn++) {
-				    if (this.rooms[rn].contains(x, y)) break;
-				}
-				if (this.rooms[rn] != room) {
-				    path.push({x: x, y: y, dir: dir, nextdir: d});
-				    return { end: this.rooms[rn], path: path };
+				if (d >= 4) 
+				{ 
+					// out of options, back up
+					if (path.length < 2) return null;
+					var back : Object = path.pop();
+					x = back.x; 
+					y = back.y;
+					dir = back.dir;
+					d = back.nextdir + 1;
+					continue;
 				}
 		
-				d = 5; // force a "back up"
-			    }
-			}
-			else d++;
+				if (d == 2) d ++; // don't look "back"
+				var tmpdir : Number = (dir + d) % 4;
+				var tmpx : Number = x + this.dirs[tmpdir].x;
+				var tmpy : Number = y + this.dirs[tmpdir].y;
+				if (_tiles[tmpx][tmpy] == ' ') 
+				{
+					path.push({x: x, y: y, dir: dir, nextdir: d});
+					x = tmpx + this.dirs[tmpdir].x; 
+					y = tmpy + this.dirs[tmpdir].y;
+					dir = tmpdir;
+					d = 0;
+					if (_tiles[x][y] == 'R') 
+					{
+						for (var rn : int = 0;rn < this.rooms.length;rn ++) 
+						{
+							if (this.rooms[rn].contains(x, y)) break;
+						}
+						if (this.rooms[rn] != room) 
+						{
+							path.push({x: x, y: y, dir: dir, nextdir: d});
+							return { end: this.rooms[rn], path: path };
+						}
+		
+						d = 5; // force a "back up"
+					}
+				}
+			else d ++;
 			}
 			return { end: null, path: null };
 		}
 
 		//
-		public function checkPath(room:Room, path:Object) {
-		    if (path == null || path.path == null || path.end == null) return;
+		/**
+		 * 
+		 * @param room
+		 * @param path
+		 */
+		public function checkPath(room : Room, path : Object) : void
+		{
+			if (path == null || path.path == null || path.end == null) return;
 		
-		    if (room.connected(path.end) && Math.floor(Math.random() * 5)) return;
+			if (room.connected(path.end) && Math.floor(Math.random() * 5)) return;
 		
-		    room.connectedRooms[path.end] = path.end;
-		    path.end.connectedRooms[room] = room;
-		    this.paths.push(path);
+			room.connectedRooms[path.end] = path.end;
+			path.end.connectedRooms[room] = room;
+			this.paths.push(path);
 		
-		    var newpath = [];
-		    // fill in the missing steps
-		    for (var i:int = 1; i < path.path.length; i++) {
-			var step = path.path[i];
-			newpath.push({
-			    x: step.x - this.dirs[step.dir].x,
-			    y: step.y - this.dirs[step.dir].y,
-			    dir: step.dir
+			var newpath:Array = [];
+			// fill in the missing steps
+			for (var i : int = 1;i < path.path.length;i ++) 
+			{
+				var step:Object = path.path[i];
+				newpath.push({
+			    x: step.x - this.dirs[step.dir].x, y: step.y - this.dirs[step.dir].y, dir: step.dir
 			});
-			newpath.push({x: step.x, y: step.y, dir: step.dir});
-		    }
-		    newpath.pop();
-		    path.path = newpath;
+				newpath.push({x: step.x, y: step.y, dir: step.dir});
+			}
+			newpath.pop();
+			path.path = newpath;
 		
-		    // proper path, draw it in
-		    for (i = 0; i < path.path.length; i++) {
-			_tiles[path.path[i].x][path.path[i].y] = 'P';
-		    }
+			// proper path, draw it in
+			for (i = 0;i < path.path.length;i ++) 
+			{
+				_tiles[path.path[i].x][path.path[i].y] = 'P';
+			}
 		}
+
 		//
-		public function genPaths() : void {
-			for (var i : int = 0;i < this.rooms.length;i++) {
-				var room : Room = this.rooms[i], edges = room.edges();
-				for (var e = 0;e < edges.length;e++) {
-					var edge = edges[e];
+		/**
+		 * 
+		 */
+		public function genPaths() : void 
+		{
+			for (var i : int = 0;i < this.rooms.length;i ++) 
+			{
+				var room : Room = this.rooms[i];
+				var edges : Array = room.edges();
+				for (var e : int = 0;e < edges.length;e ++) 
+				{
+					var edge : Object = edges[e];
 					if (_tiles[edge.x + this.dirs[edge.dir].x][edge.y + this.dirs[edge.dir].y] == ' ')
 	    			this.checkPath(room, this.findOtherEnd(room, edge.x, edge.y, edge.dir));
 				}
@@ -203,9 +267,15 @@ package com.flashartofwar.frogue.maps
 		}
 
 		//
-		public function clearJunk() : void {
-			for(var x:int = 0;x < this.width;x++) {
-				for (var y:int = 0;y < this.height;y++) {
+		/**
+		 * 
+		 */
+		public function clearJunk() : void 
+		{
+			for(var x : int = 0;x < this.width;x ++) 
+			{
+				for (var y : int = 0;y < this.height;y ++) 
+				{
 					if (_tiles[x][y] == ' ') _tiles[x][y] = '#';
 					if (_tiles[x][y] != '#') _tiles[x][y] = ' ';
 				}
@@ -213,7 +283,12 @@ package com.flashartofwar.frogue.maps
 		}
 
 		//
-		public function randomDoor() : String {
+		/**
+		 * 
+		 * @return 
+		 */
+		public function randomDoor() : String 
+		{
 			var d : Number = Math.random();
 			if (d < .3) return ' ';
 			if (d < .7) return '|';
@@ -222,18 +297,27 @@ package com.flashartofwar.frogue.maps
 		}
 
 		//
-		public function makeDoors() : void {
-			for (var i : int = 0;i < this.paths.length;i++) {
-				var path = this.paths[i].path;
-				if (Math.random() < .05) {
+		/**
+		 * 
+		 */
+		public function makeDoors() : void 
+		{
+			for (var i : int = 0;i < this.paths.length;i ++) 
+			{
+				var path : Object = this.paths[i].path;
+				if (Math.random() < .05) 
+				{
 					_tiles[path[0].x][path[0].y] = 'S';
 					_tiles[path[path.length - 1].x][path[path.length - 1].y] = 'S';
-				} else {
+				} 
+				else 
+				{
 					_tiles[path[0].x][path[0].y] = this.randomDoor();
 					_tiles[path[path.length - 1].x][path[path.length - 1].y] = this.randomDoor();
 				}
 
-				while (Math.random() < .04) { 
+				while (Math.random() < .04) 
+				{ 
 					// collapse(s)
 					i = Math.floor(Math.random() * path.length);
 					_tiles[path[i].x][path[i].y] = '#';

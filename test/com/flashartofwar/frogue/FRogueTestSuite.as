@@ -1,6 +1,5 @@
 package com.flashartofwar.frogue 
 {
-	import com.flashartofwar.frogue.maps.MapTest;
 	import com.flashartofwar.frogue.enum.TilesEnumTest;
 	import com.flashartofwar.frogue.factories.MapFactoryTest;
 	import com.flashartofwar.frogue.maps.AbstaractMapTest;
@@ -17,6 +16,6 @@ package com.flashartofwar.frogue
 		public var test1 : FRogueCoreTest;		public var test2 : MapFactoryTest;
 		public var test3 : AbstaractMapTest;		public var test4 : TilesEnumTest;
 		public var test5 : RandomMapTest;
-		public var test6 : RoomTest;		public var test7 : MapTest;
+		public var test6 : RoomTest;
 	}
 }
