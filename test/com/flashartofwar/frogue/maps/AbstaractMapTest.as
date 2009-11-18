@@ -132,7 +132,7 @@ package com.flashartofwar.frogue.maps
 			tiles = [["01","02","03","04"]];
 			var selection:Array = getTilesInRow(0, -3, 7);
 			
-			Assert.assertEquals(selection.join(), "02,03,04,x,x,x");
+			Assert.assertEquals(selection.join(), "01,02,03,04,X,X,X,X,X,X");
 		}
 	}
 }

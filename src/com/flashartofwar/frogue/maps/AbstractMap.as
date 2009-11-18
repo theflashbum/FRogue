@@ -53,40 +53,38 @@ package com.flashartofwar.frogue.maps
 
 			for(i = 0;i < verticalRange;i ++)
 			{
-				range.push(getTilesInRow(center.y + i ,center.x, horizontalRange));
+				range.push(getTilesInRow(center.y + i, center.x, horizontalRange));
 			}
 			
 			return range;
 		}
-		
+
 		protected function getTilesInRow(i : int, start : Number, end : Number) : Array
 		{
 			
-			var offset:Number = 0;
+			var offset : Number = 0;
 			if(start < 0)
 			{
-				offset = start * -1;
+				offset = start * - 1;
 				start = 0;
 			}
 			
-			var row:Array = _tiles[i] as Array;
+			var row : Array = _tiles[i] as Array;
 			
-			var total:int = row.length;
+			var total : int = row.length;
 			
-			var length:Number = end + start + offset;
+			var length : Number = end + start + offset;
+						
+			var tiles : Array = row.slice(start, end + start + offset);
 			
-			var leftOver:Number = length > total ? length - total : 0;
+			var leftOver : Number = length > total ? length - tiles.length : 0;
 			
-			var tiles:Array = row.slice(start, end + start + offset);
-			
-			if(autoAddTiles)
+			if(autoAddTiles && (leftOver > 0))
 			{
-				var emptyTiles:Array = new Array();
-				for (i = 0; i < leftOver; i++)
+				for (i = 0;i < leftOver;i ++)
 				{
-					emptyTiles.push("X");
+					tiles.push("X");
 				}
-				emptyTiles.push(leftOver);
 			}
 			return tiles;
 		}
